@@ -1,0 +1,26 @@
+# File Paths
+data_paths:
+  raw_data: "data/raw/stock_data.csv"
+  processed_data: "data/processed/preprocessed_stock_data.csv"
+  logs: "logs/"
+  notebooks: "notebooks/"
+  
+# Data Collection Config
+data_collection:
+  api_endpoint: "https://www.alphavantage.co/query"
+  stock_symbols: "IBM"
+  interval: "1min"
+  outputsize: "compact"
+
+# Preprocessing Parameters
+preprocessing:
+  missing_values_strategy: ffill
+  sma_window: 20
+  ema_window: 20
+  
+# Model Parameters (for later)
+model_params:
+  test_size: 0.2
+  random_state: 42
+  learning_rate: 0.001
+  epochs: 100
