@@ -37,7 +37,7 @@ class ConfigurationManager:
             input_csv_file=Path(self.config['data_paths']['raw_data']),
             ema_window=self.config['preprocessing']['ema_window'],
             sma_window=self.config['preprocessing']['sma_window'],
-            output_dir=Path(self.config['data_paths']['processed_data'])
+            output_dir=Path(self.config['data_paths']['processed_data']),
         )
         
         create_directories([data_preprocessing_config.output_dir])

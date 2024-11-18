@@ -1,10 +1,10 @@
 # File Paths
 data_paths:
-  raw_data: "data/raw/stock_data.csv"
+  raw_data: "data/raw/IBM_stock_data.csv"
   processed_data: "data/processed/preprocessed_stock_data.csv"
   logs: "logs/"
   notebooks: "notebooks/"
-  
+
 # Data Collection Config
 data_collection:
   api_endpoint: "https://www.alphavantage.co/query"

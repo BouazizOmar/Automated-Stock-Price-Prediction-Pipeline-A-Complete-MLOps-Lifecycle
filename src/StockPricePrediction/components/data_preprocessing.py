@@ -20,20 +20,6 @@ class DataPreprocessing:
             logger.error(f"Error loading data: {e}")
             return None
         
-    def handle_missing_values(self, df):
-        try:
-            strategy = self.config.missing_values_strategy
-            if strategy == 'mean':
-                df.fillna(df.mean(), inplace=True)
-            elif strategy == 'median':
-                df.fillna(df.median(), inplace=True)
-            elif strategy == 'ffill':
-                df.fillna(method='ffill', inplace=True)
-            logging.info("Handled missing values using strategy: " + strategy)
-            return df
-        except Exception as e:
-            logging.error(f"Error handling missing values: {e}")
-            return None
         
     def apply_transformations(self, df):
         try:
@@ -48,10 +34,10 @@ class DataPreprocessing:
             df['close_lag1'] = df['close'].shift(1)
             df['close_lag3'] = df['close'].shift(3)
             
-            logging.info("Applied transformations to data")
+            logger.info("Applied transformations to data")
             return df
         except Exception as e:
-            logging.error(f"Error applying transformations: {e}")
+            logger.error(f"Error applying transformations: {e}")
             return None
         
     def save_processed_data(self, df):
@@ -70,7 +56,6 @@ class DataPreprocessing:
     def preprocess(self):
         df = self.load_data()
         if df is not None:
-            df = self.handle_missing_values(df)
             df = self.apply_transformations(df)
             if df is not None:
                 self.save_processed_data(df)
