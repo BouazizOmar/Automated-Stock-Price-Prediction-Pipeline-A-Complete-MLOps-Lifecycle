@@ -1,7 +1,7 @@
 # File Paths
 data_paths:
-  raw_data: "data/raw/IBM_stock_data.csv"
-  processed_data: "data/processed/preprocessed_stock_data.csv"
+  raw_data: "data/raw/"
+  processed_data: "data/processed/"
   logs: "logs/"
   notebooks: "notebooks/"
 
@@ -10,17 +10,42 @@ data_collection:
   api_endpoint: "https://www.alphavantage.co/query"
   stock_symbols: "IBM"
   interval: "1min"
-  outputsize: "compact"
+  outputsize: "full"
 
 # Preprocessing Parameters
 preprocessing:
   missing_values_strategy: ffill
   sma_window: 20
   ema_window: 20
-  
-# Model Parameters (for later)
+
+# Validation Parameters
+data_validation:
+  required_columns: ["close", "SMA_20", "EMA_20", "close_lag1", "close_lag3"]
+  checked_columns: ["close", "EMA_20", "high", "open", "date", "low", "volume"]
+
+# Model Parameters
 model_params:
-  test_size: 0.2
-  random_state: 42
+  data_path: "data/processed/processed_stock_data.csv"
+  scaler_path: "artifacts/scaler/scaler.pkl"
   learning_rate: 0.001
-  epochs: 100
+  epochs: 1
+  batch_size: 32
+  lstm_units:
+    - 128
+    - 64
+  dense_units:
+    - 25
+    - 1
+
+model_evaluation_params:
+  data_path: "data/processed/processed_stock_data.csv"
+  model_path: "artifacts/model/trained_model.h5"
+  rmse_path: "artifacts/evaluation/rmse.txt"
+  sequence_length: 60
+  experiment_name: "Stock Price Prediction"
+  mlflow_uri: "https://dagshub.com/BouazizOmar/Automated-Stock-Price-Prediction-Pipeline-A-Complete-MLOps-Lifecycle.mlflow"
+  symbol: "IBM"
+  interval: "1min"
+  outputsize: "compact"
+  api_endpoint: "https://www.alphavantage.co/query"
+  

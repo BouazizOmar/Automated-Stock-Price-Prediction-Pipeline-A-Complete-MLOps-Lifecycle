@@ -1,10 +1,15 @@
 import requests
 import pandas as pd
-import logging
+from src.StockPricePrediction import logger
 import os
 import json
 
 from src.StockPricePrediction.entity.config_entity import DataIngestionConfig
+
+import requests
+import pandas as pd
+import logging
+import os
 
 class DataIngestion:
     def __init__(self, config: DataIngestionConfig):
@@ -27,20 +32,31 @@ class DataIngestion:
             logging.error(f"Error fetching data: {response.status_code}")
             return None
 
-    def save_raw_data_to_csv(self, data):
-        time_series_key = f'Time Series (1min)'
-        if time_series_key in data:
-            df = pd.DataFrame.from_dict(data[time_series_key], orient='index')
+    def save_raw_data_to_csv(self, json_data):
+        time_series_key = f'Time Series ({self.config.interval})'
+        time_series = json_data.get(time_series_key, {})
+
+        if not time_series:
+            logger.error(f"Time series data not found for interval {self.config.interval}")
+            return None
+
+        try:
+            # Create DataFrame
+            df = pd.DataFrame.from_dict(time_series, orient='index')
             df.columns = ['open', 'high', 'low', 'close', 'volume']
             df.index = pd.to_datetime(df.index)
             df = df.apply(pd.to_numeric)
 
+            # Create directory if it does not exist
+            os.makedirs(self.config.output_dir, exist_ok=True)
+
+            # Save DataFrame to CSV
             csv_path = os.path.join(self.config.output_dir, f'{self.config.symbol}_stock_data.csv')
             df.to_csv(csv_path)
-            logging.info(f"Raw data saved to {csv_path}")
+            logger.info(f"Raw data saved to {csv_path}")
             return csv_path
-        else:
-            logging.error("Time Series data not found in response")
+        except Exception as e:
+            logger.error(f"Error saving data to CSV: {e}")
             return None
 
 
