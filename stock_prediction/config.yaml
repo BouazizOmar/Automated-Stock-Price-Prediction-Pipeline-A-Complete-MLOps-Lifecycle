@@ -1,0 +1,7 @@
+model:
+  model_path: "artifacts/training/model.h5"
+sequence_length: 60
+api:
+  symbol: "IBM"
+  interval: "1min"
+  base_url: "https://www.alphavantage.co/query"

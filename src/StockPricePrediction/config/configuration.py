@@ -87,6 +87,8 @@ class ConfigurationManager:
             base_url=config['api_endpoint'],
             api_key=os.getenv('ALPHA_VANTAGE_API_KEY'),
 
+
+
         )
         
         return model_evaluation_config

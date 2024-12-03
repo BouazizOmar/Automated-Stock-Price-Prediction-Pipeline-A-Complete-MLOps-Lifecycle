@@ -6,10 +6,6 @@ import json
 
 from src.StockPricePrediction.entity.config_entity import DataIngestionConfig
 
-import requests
-import pandas as pd
-import logging
-import os
 
 class DataIngestion:
     def __init__(self, config: DataIngestionConfig):
@@ -17,9 +13,8 @@ class DataIngestion:
 
     def fetch_stock_data(self):
         params = {
-            'function': 'TIME_SERIES_INTRADAY',
+            'function': 'TIME_SERIES_DAILY',
             'symbol': self.config.symbol,
-            'interval': self.config.interval,
             'apikey': self.config.api_key,
             'outputsize': self.config.outputsize
         }
@@ -33,8 +28,8 @@ class DataIngestion:
             return None
 
     def save_raw_data_to_csv(self, json_data):
-        time_series_key = f'Time Series ({self.config.interval})'
-        time_series = json_data.get(time_series_key, {})
+        time_series = json_data.get(f'Time Series (Daily)', {})
+
 
         if not time_series:
             logger.error(f"Time series data not found for interval {self.config.interval}")

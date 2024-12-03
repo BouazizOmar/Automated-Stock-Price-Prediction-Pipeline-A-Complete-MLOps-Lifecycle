@@ -1,9 +1,9 @@
 import os
 import numpy as np
 import pandas as pd
-import requests  # Added missing import
+import requests  
 from keras.models import load_model
-from sklearn.preprocessing import MinMaxScaler  # Added missing import
+from sklearn.preprocessing import MinMaxScaler  
 from sklearn.metrics import mean_squared_error
 import mlflow
 import mlflow.keras
@@ -120,7 +120,6 @@ class ModelEvaluator:
             tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
             print("Tracking URI: ", mlflow.get_tracking_uri())
             with mlflow.start_run():
-                # Log metrics
                 mlflow.log_metric("RMSE", rmse)
                 # Log parameters
                 if tracking_url_type_store != "file":
@@ -129,6 +128,11 @@ class ModelEvaluator:
                     print("***remote***\n")
                     # Log model
                     mlflow.keras.log_model(model, artifact_path="model")
+                    mlflow.log_param("Sequence Length", self.config.sequence_length)
+                 
+                    
+                    
+
                 else:
                     # track in the local
                     print("***local***\n")

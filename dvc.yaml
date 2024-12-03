@@ -1,0 +1,40 @@
+stages:
+  data_ingestion:
+    cmd: python src\StockPricePrediction\pipeline\stage01_data_ingestion.py
+    deps:
+      - src\StockPricePrediction\pipeline\stage01_data_ingestion.py
+      - config\config.yaml
+    outs:
+      - data\raw\IBM_stock_data.csv
+
+  
+
+  data_preprocessing:
+    cmd: python src\StockPricePrediction\pipeline\stage02_data_preprocessing.py
+    deps:
+      - src\StockPricePrediction\pipeline\stage02_data_preprocessing.py
+      - data\raw\IBM_stock_data.csv
+      - config\config.yaml
+    outs:
+      - data\processed\processed_stock_data.csv
+    
+  
+  model_training:
+    cmd: python src\StockPricePrediction\pipeline\stage04_model_training.py
+    deps:
+      - src\StockPricePrediction\pipeline\stage04_model_training.py
+      - data\processed\processed_stock_data.csv
+      - config\config.yaml
+    outs:
+      - artifacts\model\trained_model.h5
+
+
+  evaluation:
+    cmd: python src\StockPricePrediction\pipeline\stage05_model_evaluation.py
+    deps:
+      - src\StockPricePrediction\pipeline\stage05_model_evaluation.py
+      - config\config.yaml
+      - artifacts\model\trained_model.h5
+    metrics:
+    - artifacts\model\rmse.json:
+        cache: false

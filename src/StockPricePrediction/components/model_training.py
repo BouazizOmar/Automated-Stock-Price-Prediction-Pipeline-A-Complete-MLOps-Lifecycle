@@ -47,7 +47,7 @@ class ModelTraining:
     # Split data
     def split_data(self, scaled_data: np.ndarray):
         try:
-            training_data_len = len(scaled_data)
+            training_data_len = len(scaled_data) - 100
             train_data = scaled_data[:training_data_len]
 
             x_train, y_train = self._create_sequences(train_data)
